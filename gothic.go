@@ -5,7 +5,7 @@ Package gothic wraps common behaviour when using Goth. This makes it quick, and 
 and running with Goth. Of course, if you want complete control over how things flow, in regards
 to the authentication process, feel free and use Goth directly.
 
-See https://github.com/iris-contrib/gothic/tree/master/example/main.go to see this in action.
+See https://github.com/iris-contrib/gothic/blob/master/example/main.go & https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
 */
 package gothic
 
@@ -34,21 +34,22 @@ var _ goth.Params = IrisGothParams{}
 /*
 BeginAuthHandler is a convienence handler for starting the authentication process.
 It expects to be able to get the name of the provider from the named parameters
-as either "provider" or ":provider".
+as either "provider" or url query parameter ":provider".
 
 BeginAuthHandler will redirect the user to the appropriate authentication end-point
 for the requested provider.
 
-See https://github.com/iris-contrib/gothic/tree/master/example/main.go to see this in action.
+See https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
 */
-func BeginAuthHandler(ctx context.IContext) {
+func BeginAuthHandler(ctx context.IContext) error {
 	url, err := GetAuthURL(ctx)
 	if err != nil {
 		ctx.EmitError(400)
-		return
+		return err
 	}
 
 	ctx.Redirect(url)
+	return nil
 }
 
 // SetState sets the state string associated with the given request.
@@ -77,7 +78,7 @@ GetAuthURL starts the authentication process with the requested provided.
 It will return a URL that should be used to send users to.
 
 It expects to be able to get the name of the provider from the query parameters
-as either "provider" or ":provider".
+as either "provider" or url query parameter ":provider".
 
 I would recommend using the BeginAuthHandler instead of doing all of these steps
 yourself, but that's entirely up to you.
@@ -121,9 +122,9 @@ CompleteUserAuth does what it says on the tin. It completes the authentication
 process and fetches all of the basic information about the user from the provider.
 
 It expects to be able to get the name of the provider from the named parameters
-as either "provider" or ":provider".
+as either "provider" or url query parameter ":provider".
 
-See https://github.com/iris-contrib/gothic/tree/master/example/main.go to see this in action.
+See https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
 */
 var CompleteUserAuth = func(ctx context.IContext) (goth.User, error) {
 
