@@ -39,7 +39,7 @@ This package was inspired by [https://github.com/intridea/omniauth](https://gith
 
 ## Docs
 
-The API docs can be found at [http://godoc.org/github.com/iris-contrib/goth](http://godoc.org/github.com/iris-contrib/goth)
+The API docs can be found at [http://godoc.org/github.com/markbates/goth](http://godoc.org/github.com/markbates/goth)
 
 ## Installation
 

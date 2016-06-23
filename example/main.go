@@ -5,12 +5,12 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/iris-contrib/plugin/oauth"
 	"github.com/kataras/iris"
-	"github.com/kataras/iris/config"
 )
 
 // register your auth via configs, providers with non-empty values will be registered to goth automatically by Iris
-var oauth = config.OAuth{
+var configs = oauth.Config{
 	Path: "/auth", //defaults to /auth
 
 	GithubKey:    "YOUR_GITHUB_KEY",
@@ -23,12 +23,14 @@ var oauth = config.OAuth{
 }
 
 func main() {
-	// set the configs
-	iris.Config.OAuth = oauth
+	// create the plugin with our configs
+	authentication := oauth.New(configs)
+	// register the plugin to iris
+	iris.Plugins.Add(authentication)
 
 	m := make(map[string]string)
-	m[oauth.GithubName] = "Github"
-	m[oauth.FacebookName] = "Facebook"
+	m[configs.GithubName] = "Github" // same as authentication.Config.GithubName
+	m[configs.FacebookName] = "Facebook"
 
 	var keys []string
 	for k := range m {
@@ -38,19 +40,22 @@ func main() {
 
 	providerIndex := &ProviderIndex{Providers: keys, ProvidersMap: m}
 
+	// set a  login success handler( you can use more than one handler)
 	// if user succeed to logged in
 	// client comes here from: localhost:3000/auth/lowercase_provider_name/callback
-	iris.OnUserOAuth(func(ctx *iris.Context) {
+	authentication.Success(func(ctx *iris.Context) {
 		// ctx.OAuthUser() returns the authenticated goth.User
 		// if user couldn't validate then server sends StatusUnauthorized, which you can handle by: iris.OnError(iris.StatusUnauthorized, func(ctx *iris.Context){})
-		user := ctx.OAuthUser()
+		user := authentication.User(ctx)
 
-		// you can get the url by the predefined-named-route 'oauth'
+		// you can get the url by the predefined-named-route 'oauth' which you can change by Config's field: RouteName
 		println("came from " + iris.URL("oauth", strings.ToLower(user.Provider)))
 
 		t, _ := template.New("foo").Parse(userTemplate)
 		ctx.ExecuteTemplate(t, user)
 	})
+
+	// customize the error page using: authentication.Fail(func(ctx *iris.Context){....})
 
 	iris.Get("/", func(ctx *iris.Context) {
 		t, _ := template.New("foo").Parse(indexTemplate)
@@ -67,7 +72,7 @@ type ProviderIndex struct {
 }
 
 var indexTemplate = `{{range $key,$value:=.Providers}}
-    <p><a href="` + oauth.Path + `/{{$value}}">Log in with {{index $.ProvidersMap $value}}</a></p>
+    <p><a href="` + configs.Path + `/{{$value}}">Log in with {{index $.ProvidersMap $value}}</a></p>
 {{end}}`
 
 var userTemplate = `
