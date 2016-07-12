@@ -128,7 +128,7 @@ func main() {
 		}
 
 		t, _ := template.New("foo").Parse(userTemplate)
-		ctx.ExecuteTemplate(t, user)
+		t.Execute(ctx.Response.BodyWriter(), user)
 	})
 
 	iris.Get("/auth/:provider", func(ctx *iris.Context) {
@@ -140,7 +140,7 @@ func main() {
 
 	iris.Get("/", func(ctx *iris.Context) {
 		t, _ := template.New("foo").Parse(indexTemplate)
-		ctx.ExecuteTemplate(t, providerIndex)
+		t.Execute(ctx.Response.BodyWriter(), providerIndex)
 	})
 	iris.Listen(":3000")
 }
