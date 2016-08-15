@@ -81,7 +81,7 @@ $ go get github.com/iris-contrib/goth
 
 ## Examples
 
-See the [examples](examples) folder for a working application that lets users authenticate
+See the [example](https://github.com/iris-contrib/gothic/tree/master/example) folder for a working application that lets users authenticate
 through Twitter, Facebook, Google Plus etc.
 
 ## Issues
