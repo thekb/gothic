@@ -13,7 +13,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/kataras/iris/context"
+	"github.com/kataras/iris"
 	"github.com/markbates/goth"
 )
 
@@ -41,7 +41,7 @@ for the requested provider.
 
 See https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
 */
-func BeginAuthHandler(ctx context.IContext) error {
+func BeginAuthHandler(ctx *iris.Context) error {
 	url, err := GetAuthURL(ctx)
 	if err != nil {
 		ctx.EmitError(400)
@@ -56,7 +56,7 @@ func BeginAuthHandler(ctx context.IContext) error {
 // If no state string is associated with the request, one will be generated.
 // This state is sent to the provider and can be retrieved during the
 // callback.
-var SetState = func(ctx context.IContext) string {
+var SetState = func(ctx *iris.Context) string {
 	state := ctx.URLParam("state")
 	if len(state) > 0 {
 		return state
@@ -69,7 +69,7 @@ var SetState = func(ctx context.IContext) string {
 // GetState gets the state returned by the provider during the callback.
 // This is used to prevent CSRF attacks, see
 // http://tools.ietf.org/html/rfc6749#section-10.12
-var GetState = func(ctx context.IContext) string {
+var GetState = func(ctx *iris.Context) string {
 	return ctx.URLParam("state")
 }
 
@@ -83,7 +83,7 @@ as either "provider" or url query parameter ":provider".
 I would recommend using the BeginAuthHandler instead of doing all of these steps
 yourself, but that's entirely up to you.
 */
-func GetAuthURL(ctx context.IContext) (string, error) {
+func GetAuthURL(ctx *iris.Context) (string, error) {
 
 	if ctx.Session() == nil {
 		fmt.Println("You have to enable iris sessions")
@@ -122,7 +122,7 @@ as either "provider" or url query parameter ":provider".
 
 See https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
 */
-var CompleteUserAuth = func(ctx context.IContext) (goth.User, error) {
+var CompleteUserAuth = func(ctx *iris.Context) (goth.User, error) {
 
 	if ctx.Session() == nil {
 		fmt.Println("You have to enable iris sessions")
@@ -162,7 +162,7 @@ var CompleteUserAuth = func(ctx context.IContext) (goth.User, error) {
 // name for your request.
 var GetProviderName = getProviderName
 
-func getProviderName(ctx context.IContext) (string, error) {
+func getProviderName(ctx *iris.Context) (string, error) {
 	provider := ctx.Param("provider")
 	if provider == "" {
 		provider = ctx.URLParam(":provider")
