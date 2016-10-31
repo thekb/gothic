@@ -5,7 +5,7 @@ Package gothic wraps common behaviour when using Goth. This makes it quick, and 
 and running with Goth. Of course, if you want complete control over how things flow, in regards
 to the authentication process, feel free and use Goth directly.
 
-See https://github.com/iris-contrib/gothic/blob/master/example/main.go & https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
+See https://github.com/iris-contrib/gothic/blob/master/_example/main.go & https://github.com/iris-contrib/gothic/blob/master/_example_low_level/main.go to see this in action.
 */
 package gothic
 
@@ -39,7 +39,7 @@ as either "provider" or url query parameter ":provider".
 BeginAuthHandler will redirect the user to the appropriate authentication end-point
 for the requested provider.
 
-See https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
+See https://github.com/iris-contrib/gothic/blob/master/_example_low_level/main.go to see this in action.
 */
 func BeginAuthHandler(ctx *iris.Context) error {
 	url, err := GetAuthURL(ctx)
@@ -120,7 +120,7 @@ process and fetches all of the basic information about the user from the provide
 It expects to be able to get the name of the provider from the named parameters
 as either "provider" or url query parameter ":provider".
 
-See https://github.com/iris-contrib/gothic/blob/master/example_low_level/main.go to see this in action.
+See https://github.com/iris-contrib/gothic/blob/master/_example_low_level/main.go to see this in action.
 */
 var CompleteUserAuth = func(ctx *iris.Context) (goth.User, error) {
 
