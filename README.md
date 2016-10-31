@@ -1,11 +1,11 @@
 ## Repository information
 
-This repository is an [Iris](https://github.com/kataras/iris) port of the [http://github.com/markbates/goth](http://github.com/markbates/goth) and it's used as store for the real [OAuth/OAuth2 plugin](https://github.com/iris-contrib/plugin/tree/master/oauth).
+This repository is an [Iris v4](https://github.com/kataras/iris/tree/4.0.0) port of the [http://github.com/markbates/goth](http://github.com/markbates/goth) and it's used as store for the real [OAuth/OAuth2 plugin](https://github.com/iris-contrib/plugin/tree/4.0.0/oauth).
 
 ## Installation
 
 ```text
-$ go get github.com/iris-contrib/plugin/oauth
+$ go get gopkg.in/iris-contrib/plugin.v4/oauth
 ```
 
 ## Supported Providers
@@ -42,6 +42,6 @@ $ go get github.com/iris-contrib/plugin/oauth
 
 ## Examples
 
-See the [example](https://github.com/iris-contrib/examples) folder for a high-level working application that lets users authenticate
+See the [example](https://github.com/iris-contrib/examples/tree/4.0.0) folder for a high-level working application that lets users authenticate
 through Twitter, Facebook, Google Plus etc.
 
